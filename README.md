@@ -1,13 +1,8 @@
-# Frachtwerk Starter File Storage Module
+# Essencium Backend File Storage Module
 
-To be used together with [web-starter/backend](https://git.frachtwerk.de/fw-dev/web-starter/backend) (
-version >=`2.1.0`).
+To be used together with [essencium-backend](https://github.com/Frachtwerk/essencium-backend) (version >=`2.4.2`).
 
-This module provides an abstraction layer to store files needed for your application. The actual persistence location
-and
-implementation is independent of the handling of files. This is achieved by providing various storage provider
-implementations
-that can be used independently of another.
+This module provides an abstraction layer to store files needed for your application. The actual persistence location and implementation is independent of the handling of files. This is achieved by providing various storage provider implementations that can be used independently of another.
 
 It is possible to store a file with multiple storage providers to provide redundancy and to access these even if not all
 used providers are available at the time of requesting a file.
@@ -23,30 +18,30 @@ Example using the sequence strategy:
 @SpringBootApplication(
     scanBasePackages = {
       "de.frachtwerk.my.application",
-      "de.frachtwerk.starter.backend",
-      "de.frachtwerk.starter.storage.generic",
-      "de.frachtwerk.starter.storage.impl.sequence"
+      "de.frachtwerk.essencium.backend",
+      "de.frachtwerk.essencium.storage.generic",
+      "de.frachtwerk.essencium.storage.impl.sequence"
     })
 @EntityScan(
     basePackages = {
       "de.frachtwerk.my.application",
-      "de.frachtwerk.starter.backend",
-      "de.frachtwerk.starter.storage.generic",
-      "de.frachtwerk.starter.storage.impl.sequence"
+      "de.frachtwerk.essencium.backend",
+      "de.frachtwerk.essencium.storage.generic",
+      "de.frachtwerk.essencium.storage.impl.sequence"
     })
 @ConfigurationPropertiesScan(
     basePackages = {
       "de.frachtwerk.my.application",
-      "de.frachtwerk.starter.backend",
-      "de.frachtwerk.starter.storage.generic",
-      "de.frachtwerk.starter.storage.impl.sequence",
+      "de.frachtwerk.essencium.backend",
+      "de.frachtwerk.essencium.storage.generic",
+      "de.frachtwerk.essencium.storage.impl.sequence",
     })
 @EnableJpaRepositories(
     basePackages = {
       "de.frachtwerk.my.application",
-      "de.frachtwerk.starter.backend",
-      "de.frachtwerk.starter.storage.generic",
-      "de.frachtwerk.starter.storage.impl.sequence"
+      "de.frachtwerk.essencium.backend",
+      "de.frachtwerk.essencium.storage.generic",
+      "de.frachtwerk.essencium.storage.impl.sequence"
     })
 public class SpringBootApp {
   public static void main(String[] args) {
@@ -59,8 +54,7 @@ Note that when linking custom entities to files, do not specify an abstract `Fil
 
 ### Environment
 
-The module is configured by using the application.yaml config file of your starter application. The used prefix is
-`file.storage`
+The module is configured by using the application.yaml config file of your essencium application. The used prefix is `file.storage`
 
 ### usedProviders
 
@@ -78,7 +72,7 @@ Config parameters for the local provider.
 | `active`       | boolean | `false` |                    | Setting active to `true` tells the spring application to include components needed for the local storage provider in its component and entity scan. A file stored with the local provider cannot be loaded if active is not set to true. |
 | `keepFileName` | boolean | `false` |                    | Whether to use the provided original file when storing the file on the file system. When set to `false` randomized uuid's are used as file names.                                                                                        |
 | `useTempFiles` | boolean | `false` |                    | Whether to use temp files (e.g. in `/tmp`) that are deleted when the application stops. For development purposes.                                                                                                                        |
-| `path`         | String  | ---     | :white_check_mark: | The absolute path of the directory on the file system of the starter application to use to store files.                                                                                                                                  |
+| `path`         | String  | ---     | :white_check_mark: | The absolute path of the directory on the file system of the essencium application to use to store files.                                                                                                                                  |
 
 ### `s3`
 
@@ -99,47 +93,6 @@ If  `endpointUrl`, `accessKey` and `secretKey` are not provided, the aws default
 setting `kmsKeyId` and `kmsRegion` the s3 provider uses a KMS-Key to encrypt the files.
 For non-AWS S3-Buckets, the `endpointUrl`, `accessKey` and `secretKey` have to be set to the S3-Endpoint and Credentials
 of the host.
-
-For using the s3 provider additional dependencies have to be added in your project:
-
-```xml
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>de.frachtwerk</groupId>
-    <artifactId>yourApplication</artifactId>
-
-    <!-- ... -->
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>bom</artifactId>
-                <version>2.20.82</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <!-- s3 Storage -->
-        <dependency>
-            <artifactId>s3</artifactId>
-            <groupId>software.amazon.awssdk</groupId>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>kms</artifactId>
-        </dependency>
-    </dependencies>
-
-</project>
-```
 
 ## Requirements
 
