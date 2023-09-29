@@ -19,7 +19,7 @@
     <description>Essencium Backend is a software library built on top of Essencium Backend that allows developers to
         quickly get started on new software projects. Essencium provides, for example, a fully implemented role-rights
         concept as well as various field-tested solutions for access management and authentication. The Storage Module
-        ca be used as a plugin to store files to al local folder or some other storage providers (e.g. S3).
+        can be used as a plugin to store files to al local folder or some other storage providers (e.g. S3).
     </description>
     <url>https://www.frachtwerk.de</url>
 
