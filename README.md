@@ -1,6 +1,8 @@
 # Essencium Backend File Storage Module
 
-To be used together with [essencium-backend](https://github.com/Frachtwerk/essencium-backend) (version >=`2.4.2`).
+[![Essencium Storage CI - Dev/Main](https://github.com/Frachtwerk/essencium-backend-file-storage/actions/workflows/dev.yml/badge.svg)](https://github.com/Frachtwerk/essencium-backend-file-storage/actions/workflows/dev.yml)
+
+To be used together with [essencium-backend](https://github.com/Frachtwerk/essencium-backend) (version >=`2.4.5`).
 
 This module provides an abstraction layer to store files needed for your application. The actual persistence location and implementation is independent of the handling of files. This is achieved by providing various storage provider implementations that can be used independently of another.
 
