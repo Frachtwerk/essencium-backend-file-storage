@@ -29,18 +29,26 @@ import java.util.Optional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-/** Service able of permanently writing files and read them again later. */
+/**
+ * Service able of permanently writing files and read them again later.
+ *
+ * @param <F> File to be handled
+ * @param <ID> Data type of the file id
+ * @param <S> Storage info of the file
+ */
 @Service
 public interface FileService<
     F extends AbstractFile<F, ID, S>,
     ID extends Serializable,
     S extends AbstractStorageInfo<F, ID, S>> {
   /**
-   * Stores a file in the configured storage.
+   * Stores a file in the configured storages.
    *
-   * @param fileContent the actual content to be stored as a file.
-   * @return the persisted file information referencing to the stored file.
-   * @throws IOException
+   * @param name Name of the file
+   * @param mimeType Mime type of the file
+   * @param fileContent Content of the file as byte array
+   * @return Storage info of the file
+   * @throws IOException If the file could not be stored
    */
   F storeFile(String name, String mimeType, final byte[] fileContent) throws IOException;
 
