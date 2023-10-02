@@ -28,13 +28,13 @@ import de.frachtwerk.essencium.storage.generic.provider.local.AbstractLocalStora
 import de.frachtwerk.essencium.storage.generic.provider.local.AbstractLocalStorageService;
 import de.frachtwerk.essencium.storage.generic.provider.s3.AbstractS3StorageInfo;
 import de.frachtwerk.essencium.storage.generic.provider.s3.AbstractS3StorageService;
+import jakarta.annotation.Nullable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
