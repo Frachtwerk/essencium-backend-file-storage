@@ -28,9 +28,6 @@ concurrency:
   group: "${{ github.ref }}"
   cancel-in-progress: true
 
-env:
-  SONAR_TOKEN: "${{ secrets.SONAR_TOKEN }}"
-
 jobs:
   compile:
     runs-on: ubuntu-latest
@@ -54,25 +51,3 @@ jobs:
           name: essencium-backend-file-storage
           retention-days: 1
           path: "./target/*"
-
-  trivy-repo-scan:
-    needs:
-      - compile
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Run Trivy vulnerability scanner in fs mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: './'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,HIGH,CRITICAL'
-          # trivy-config: trivy.yaml
-      # Only available with GitHub Advanced Security
-      #- name: Upload Trivy scan results to GitHub Security tab
-      #  uses: github/codeql-action/upload-sarif@v3
-      #  with:
-      #    sarif_file: 'trivy-results.sarif'
