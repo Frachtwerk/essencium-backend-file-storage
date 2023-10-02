@@ -55,7 +55,7 @@ jobs:
 
   trivy-repo-scan:
     needs:
-      - compile-main
+      - compile
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
