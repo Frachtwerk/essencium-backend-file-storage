@@ -1,6 +1,8 @@
 # Essencium Backend File Storage Module
 
 [![Essencium Storage CI - Dev/Main](https://github.com/Frachtwerk/essencium-backend-file-storage/actions/workflows/dev.yml/badge.svg)](https://github.com/Frachtwerk/essencium-backend-file-storage/actions/workflows/dev.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Frachtwerk_essencium-backend-file-storage&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Frachtwerk_essencium-backend-file-storage)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Frachtwerk_essencium-backend-file-storage&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Frachtwerk_essencium-backend-file-storage)
 
 To be used together with [essencium-backend](https://github.com/Frachtwerk/essencium-backend) (version >=`2.4.5`).
 
