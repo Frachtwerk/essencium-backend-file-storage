@@ -40,7 +40,8 @@ jobs:
           echo "Deleting runs..."
           for runId in $runs
           do
-              gh run delete $runId -R $REPO
+            echo "Deleting run $runId"
+            gh run delete $runId -R $REPO
           done
           echo "Done"
         env:
@@ -75,7 +76,7 @@ jobs:
               echo "Keeping cache $cacheKey"
             else
               echo "Deleting cache $cacheKey"
-              # gh cache delete $cacheKey -R $REPO
+              gh cache delete $cacheKey -R $REPO
             fi
           done
           echo "Done"
