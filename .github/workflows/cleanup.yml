@@ -25,7 +25,7 @@ on:
       - '*'
 
 jobs:
-  cleanup-container-registry:
+  cleanup:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -63,9 +63,8 @@ jobs:
           }
 
           echo "Fetching list of cache key"
-          # cacheKeysForPR=$(gh actions-cache list -R $REPO -B $BRANCH -L 100 | cut -f 1 )
-          cacheKeys=$(gh cache list -R $REPO -L 100 --json id -q '.[].id')
-          cacheKeysToKeep=$(gh cache list -R $REPO -L 3 --json id -q '.[].id')
+          cacheKeys=$(gh cache list -R $REPO -L 100 | cut -f 1)
+          cacheKeysToKeep=$(gh cache list -R $REPO -L 3 | cut -f 1)
 
           ## Setting this to not fail the workflow while deleting cache keys.
           set +e
