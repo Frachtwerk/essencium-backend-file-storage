@@ -35,6 +35,4 @@ public class S3StorageConfiguration {
   @NotNull @NotBlank private String bucketName;
   private String accessKey;
   private String secretKey;
-  private String kmsKeyId;
-  private String kmsRegion;
 }
