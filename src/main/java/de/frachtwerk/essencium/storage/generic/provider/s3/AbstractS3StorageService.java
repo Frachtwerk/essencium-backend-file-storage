@@ -38,14 +38,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import software.amazon.awssdk.auth.credentials.*;
-import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.kms.KmsClient;
-import software.amazon.awssdk.services.kms.model.DecryptRequest;
-import software.amazon.awssdk.services.kms.model.EncryptRequest;
-import software.amazon.awssdk.services.kms.model.EncryptResponse;
-import software.amazon.awssdk.services.kms.model.KmsException;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
 import software.amazon.awssdk.services.s3.model.*;
@@ -113,12 +107,6 @@ public abstract class AbstractS3StorageService<
     }
   }
 
-  // Return a KmsClient object.
-  private KmsClient getKMSClient() {
-    Region region = getRegion(config.getKmsRegion());
-    return KmsClient.builder().credentialsProvider(getCredentialProvider()).region(region).build();
-  }
-
   private Region getRegion(@Nullable String region) {
     if (StringUtils.isNotBlank(region)) return Region.of(region);
     else return Region.EU_CENTRAL_1;
@@ -133,11 +121,6 @@ public abstract class AbstractS3StorageService<
 
       // create object key
       String s3ObjectKey = getNewObjectKey(s3, config.getBucketName());
-
-      // apply kms encryption in aws context if enabled
-      if (!StringUtils.isBlank(config.getKmsKeyId())) {
-        content = encryptWithKmsKey(content, config.getKmsKeyId());
-      }
 
       // prepare upload
       PutObjectRequest putObjectRequest =
@@ -202,12 +185,7 @@ public abstract class AbstractS3StorageService<
               .key(info.getS3ObjectKey())
               .bucket(config.getBucketName())
               .build();
-      byte[] byteArray = s3.getObjectAsBytes(objectRequest).asByteArray();
-      // decrypt using kms encryption in aws context if enabled
-      if (!StringUtils.isBlank(config.getKmsKeyId())) {
-        byteArray = decryptWithKmsKey(byteArray, config.getKmsKeyId());
-      }
-      info.setContent(new ByteArrayResource(byteArray));
+      info.setContent(new ByteArrayResource(s3.getObjectAsBytes(objectRequest).asByteArray()));
       return (S) info;
     } catch (Exception e) {
       LOG.error("Error loading file from S3", e);
@@ -243,33 +221,5 @@ public abstract class AbstractS3StorageService<
       s3ObjectKey = UUID.randomUUID().toString();
     } while (existingKeys.contains(s3ObjectKey));
     return s3ObjectKey;
-  }
-
-  private byte[] encryptWithKmsKey(byte[] data, String keyId) {
-    try (KmsClient kmsClient = getKMSClient()) {
-      SdkBytes myBytes = SdkBytes.fromByteArray(data);
-      EncryptRequest encryptRequest =
-          EncryptRequest.builder().keyId(keyId).plaintext(myBytes).build();
-      EncryptResponse encryptResponse = kmsClient.encrypt(encryptRequest);
-      LOG.debug("The encryption algorithm is " + encryptResponse.encryptionAlgorithm().toString());
-      // Return the encrypted data.
-      return encryptResponse.ciphertextBlob().asByteArray();
-    } catch (KmsException e) {
-      LOG.error("Error encrypting data", e);
-      throw e;
-    }
-  }
-
-  // Decrypt the data passed as a byte array.
-  private byte[] decryptWithKmsKey(byte[] data, String keyId) {
-    try (KmsClient kmsClient = getKMSClient()) {
-      SdkBytes encryptedData = SdkBytes.fromByteArray(data);
-      DecryptRequest decryptRequest =
-          DecryptRequest.builder().ciphertextBlob(encryptedData).keyId(keyId).build();
-      return kmsClient.decrypt(decryptRequest).plaintext().asByteArray();
-    } catch (KmsException e) {
-      LOG.error("Error decrypting data", e);
-      throw e;
-    }
   }
 }
