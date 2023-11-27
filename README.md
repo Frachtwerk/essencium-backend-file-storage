@@ -90,11 +90,8 @@ Config parameters for the s3 provider.
 | `bucketName`  | String  | ---     | :white_check_mark: | Defines the name of the s3-bucket to be used. If there is no bucket with the given name, one is created.                                                                                                                           |
 | `accessKey`   | String  | ---     |                    | Access Key defined by your s3-bucket host                                                                                                                                                                                          |
 | `secretKey`   | String  | ---     |                    | Secret Key defined by your s3-bucket host                                                                                                                                                                                          |
-| `kmsKeyId`    | String  | ---     |                    | :warning: [ experimental, untested ] Use a KMS-Key and KMS-Region provided by AWS IAM to access the S3-Bucket.                                                                                                                     |
-| `kmsRegion`   | String  | ---     |                    | :warning: [ experimental, untested ] Use a KMS-Key and KMS-Region provided by AWS IAM to access the S3-Bucket.                                                                                                                     |
 
-If  `endpointUrl`, `accessKey` and `secretKey` are not provided, the aws default credentials provider chain is used. By
-setting `kmsKeyId` and `kmsRegion` the s3 provider uses a KMS-Key to encrypt the files.
+If  `endpointUrl`, `accessKey` and `secretKey` are not provided, the aws default credentials provider chain is used. 
 For non-AWS S3-Buckets, the `endpointUrl`, `accessKey` and `secretKey` have to be set to the S3-Endpoint and Credentials
 of the host.
 
