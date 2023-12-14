@@ -46,7 +46,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
           cache: 'maven'
       - run: mvn -f pom.xml compile
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: success()
         with:
           name: essencium-backend-file-storage
