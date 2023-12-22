@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.14.3 (2023-12-22)
+
+- upgraded org.springframework.boot:spring-boot-starter-parent from 3.2.0 to 3.2.1
+- upgraded de.frachtwerk:essencium-backend from 2.4.7 to 2.4.11
+- upgraded software.amazon.awssdk BOM from 2.21.99 to 2.22.3
+- upgraded org.apache.maven.plugins:maven-javadoc-plugin from 3.6.2 to 3.6.3
+
 ## 0.14.2 (2023-11-27)
 
 - upgraded org.springframework.boot:spring-boot-starter-parent from 3.1.5 to 3.2.0
