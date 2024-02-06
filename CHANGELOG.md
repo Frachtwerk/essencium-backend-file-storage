@@ -2,8 +2,8 @@
 
 ## 
 
-- upgraded de.frachtwerk:essencium-backend from 2.5.4 to 2.5.5
-- upgraded software.amazon.awssdk:bom from 2.23.9 to 2.23.16
+- upgraded de.frachtwerk:essencium-backend from 2.5.4 to 2.5.6
+- upgraded software.amazon.awssdk:bom from 2.23.9 to 2.23.17
 - upgraded com.cosium.code:git-code-format-maven-plugin from 5.1 to 5.3
 - upgraded com.cosium.code:google-java-format from 5.1 to 5.3
 
