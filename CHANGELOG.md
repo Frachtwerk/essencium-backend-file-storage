@@ -1,11 +1,12 @@
 # Changelog
 
-## 
+## 0.15.0 (2024-02-26)
 
-- upgraded de.frachtwerk:essencium-backend from 2.5.4 to 2.5.6
-- upgraded software.amazon.awssdk:bom from 2.23.9 to 2.23.17
+- upgraded de.frachtwerk:essencium-backend from 2.5.4 to 2.5.11
+- upgraded software.amazon.awssdk:bom from 2.23.9 to 2.24.9
 - upgraded com.cosium.code:git-code-format-maven-plugin from 5.1 to 5.3
 - upgraded com.cosium.code:google-java-format from 5.1 to 5.3
+- upgraded org.springframework.boot:spring-boot-starter-parent from 3.2.2 to 3.2.3
 
 ## 0.14.6 (2024-01-24)
 
