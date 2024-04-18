@@ -1,5 +1,10 @@
 # Changelog
 
+## ---
+
+- upgraded software.amazon.awssdk:bom from 2.25.22 to 2.25.32
+- upgraded de.frachtwerk:essencium-backend from 2.5.13 to 2.5.14
+
 ## 0.16.0 (2024-04-03)
 
 - upgraded de.frachtwerk:essencium-backend from 2.5.11 to 2.5.13
