@@ -99,7 +99,9 @@ public abstract class AbstractS3StorageService<
       return StaticCredentialsProvider.create(awsCredentials);
     } else {
       LOG.debug("Using default credentials provider");
-      DefaultCredentialsProvider defaultCredentialsProvider = DefaultCredentialsProvider.create();
+      // do not use DefaultCredentialsProvider.create() as it does not create a new instance.
+      DefaultCredentialsProvider defaultCredentialsProvider =
+          DefaultCredentialsProvider.builder().build();
       LOG.debug(
           "DefaultCredentialsProvider, accessKeyId: {}",
           defaultCredentialsProvider.resolveCredentials().accessKeyId());

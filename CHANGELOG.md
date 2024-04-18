@@ -1,7 +1,8 @@
 # Changelog
 
-## ---
+## 0.16.1 (2024-04-18)
 
+- fix: Use Builder instead of 'create()' for DefaultCredentialsProvider
 - upgraded software.amazon.awssdk:bom from 2.25.22 to 2.25.32
 - upgraded de.frachtwerk:essencium-backend from 2.5.13 to 2.5.14
 
