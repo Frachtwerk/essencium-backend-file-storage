@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0 (2024-06-17)
+
+- upgraded de.frachtwerk:essencium-backend from 2.5.14 to 2.6.0
+- upgraded software.amazon.awssdk:bom from 2.25.32 to 2.26.1
+- upgraded org.springframework.boot:spring-boot-starter-parent from 3.2.4 to 3.3.0
+
 ## 0.16.1 (2024-04-18)
 
 - fix: Use Builder instead of 'create()' for DefaultCredentialsProvider
