@@ -1,9 +1,9 @@
 # Changelog
 
-## _____
+## 0.18.0 (2024-09-19)
 
 - upgraded de.frachtwerk:essencium-backend from 2.6.0 to 2.8.0
-- upgraded software.amazon.awssdk:bom from 2.26.3 to 2.28.3
+- upgraded software.amazon.awssdk:bom from 2.26.3 to 2.28.4
 - upgraded org.springframework.boot:spring-boot-starter-parent from 3.3.0 to 3.3.3
 
 ## 0.17.0 (2024-06-17)
