@@ -58,4 +58,9 @@ public class LocalSequenceStorageInfo extends SequenceStorageInfo
   public <T> T accept(StorageInfoVisitor<T, SequenceFile, Long, SequenceStorageInfo> visitor) {
     return visitor.visit(this);
   }
+
+  @Override
+  public String getTitle() {
+    return "LocalSequenceStorageInfo " + id;
+  }
 }

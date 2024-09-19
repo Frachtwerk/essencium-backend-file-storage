@@ -33,9 +33,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -45,12 +44,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DownloadEndpoint<
     F extends AbstractFile<F, ID, S>,
     ID extends Serializable,
     S extends AbstractStorageInfo<F, ID, S>> {
-  private static final Logger LOG = LoggerFactory.getLogger(DownloadEndpoint.class);
-
   private final FileService<F, ID, S> service;
   private final UniqueNameCreator uniqueNameCreator;
 
@@ -114,11 +112,11 @@ public class DownloadEndpoint<
               return resource;
             }
           } else {
-            LOG.warn("File is marked available but resource is null");
+            log.warn("File is marked available but resource is null");
             service.markAsUnavailable(storage);
           }
         } else {
-          LOG.warn("File {} in {} is not available.", file.getId(), storage);
+          log.warn("File {} in {} is not available.", file.getId(), storage);
           service.markAsUnavailable(storage);
         }
       }

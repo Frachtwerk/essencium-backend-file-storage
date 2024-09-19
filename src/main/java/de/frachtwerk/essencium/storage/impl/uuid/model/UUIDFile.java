@@ -72,4 +72,9 @@ public class UUIDFile extends AbstractFile<UUIDFile, UUID, UUIDStorageInfo> {
   public <T> Set<T> accept(StorageInfoVisitor<T, UUIDFile, UUID, UUIDStorageInfo> visitor) {
     return storageInfos.stream().map(i -> i.accept(visitor)).collect(Collectors.toSet());
   }
+
+  @Override
+  public String getTitle() {
+    return "UUIDFile " + id;
+  }
 }

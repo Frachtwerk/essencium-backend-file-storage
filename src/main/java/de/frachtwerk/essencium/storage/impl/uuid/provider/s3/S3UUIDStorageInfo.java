@@ -55,4 +55,9 @@ public class S3UUIDStorageInfo extends UUIDStorageInfo
   public <T> T accept(StorageInfoVisitor<T, UUIDFile, UUID, UUIDStorageInfo> visitor) {
     return visitor.visit(this);
   }
+
+  @Override
+  public String getTitle() {
+    return "S3UUIDStorageInfo " + id;
+  }
 }

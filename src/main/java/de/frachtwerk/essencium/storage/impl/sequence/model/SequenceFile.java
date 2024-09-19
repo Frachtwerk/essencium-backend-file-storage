@@ -75,4 +75,9 @@ public class SequenceFile extends AbstractFile<SequenceFile, Long, SequenceStora
   public <T> Set<T> accept(StorageInfoVisitor<T, SequenceFile, Long, SequenceStorageInfo> visitor) {
     return storageInfos.stream().map(i -> i.accept(visitor)).collect(Collectors.toSet());
   }
+
+  @Override
+  public String getTitle() {
+    return getName();
+  }
 }

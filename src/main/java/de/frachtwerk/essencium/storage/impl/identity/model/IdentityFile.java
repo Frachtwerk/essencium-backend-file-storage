@@ -72,4 +72,9 @@ public class IdentityFile extends AbstractFile<IdentityFile, Long, IdentityStora
   public <T> Set<T> accept(StorageInfoVisitor<T, IdentityFile, Long, IdentityStorageInfo> visitor) {
     return storageInfos.stream().map(i -> i.accept(visitor)).collect(Collectors.toSet());
   }
+
+  @Override
+  public String getTitle() {
+    return getName();
+  }
 }
