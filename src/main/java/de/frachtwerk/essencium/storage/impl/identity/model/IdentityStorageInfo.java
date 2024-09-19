@@ -47,4 +47,9 @@ public class IdentityStorageInfo
   public <T> T accept(StorageInfoVisitor<T, IdentityFile, Long, IdentityStorageInfo> visitor) {
     return null;
   }
+
+  @Override
+  public String getTitle() {
+    return "IdentityStorageInfo " + id;
+  }
 }
