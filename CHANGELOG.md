@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.21.0 
+
+- upgrade software.amazon.awssdk:bom from 2.31.2 to 2.31.75
+
 ## 0.20.0 (2025-03-19)
 
 - upgrade de.frachtwerk:essencium-backend from 2.9.0 to 2.10.1
