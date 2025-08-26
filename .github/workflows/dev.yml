@@ -21,8 +21,10 @@ on:
   push:
     branches:
       - '*'
-      - master
-      - main
+      - 'master'
+      - 'main'
+  pull_request:
+    branches: [ "main" ]
 
 concurrency:
   group: "${{ github.ref }}"
