@@ -19,12 +19,10 @@ name: Essencium Storage CI - Dev/Main
 
 on:
   push:
-    branches:
-      - '*'
-      - 'master'
-      - 'main'
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 concurrency:
   group: "${{ github.ref }}"
