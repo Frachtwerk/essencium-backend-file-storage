@@ -2,13 +2,15 @@
 
 ## 0.21.0 
 
+- **Java21**
 - upgrade software.amazon.awssdk:bom from 2.31.2 to 2.31.75
-- upgrade de.frachtwerk:essencium-backend from 2.10.1 to 2.10.3
+- upgrade de.frachtwerk:essencium-backend from 2.10.1 to 2.12.0
+- upgrade org.springframework.boot:spring-boot-starter-parent from 3.4.3 to 3.5.5
 
 ## 0.20.0 (2025-03-19)
 
 - upgrade de.frachtwerk:essencium-backend from 2.9.0 to 2.10.1
-- upgrade org.springframework.boot:spring-boot-starter-parent from 3.3.5 to 3.4.
+- upgrade org.springframework.boot:spring-boot-starter-parent from 3.3.5 to 3.4.3
 - upgrade software.amazon.awssdk:bom from 2.29.9 to 2.31.2
 
 ## 0.19.0 (2024-11-12)
