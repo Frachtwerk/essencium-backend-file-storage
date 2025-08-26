@@ -4,7 +4,7 @@
 
 - **Java21**
 - add integration tests to verify correct up- and download handling
-- upgrade software.amazon.awssdk:bom from 2.31.2 to 2.31.75
+- upgrade software.amazon.awssdk:bom from 2.31.2 to 2.32.29
 - upgrade de.frachtwerk:essencium-backend from 2.10.1 to 2.12.0
 - upgrade org.springframework.boot:spring-boot-starter-parent from 3.4.3 to 3.5.5
 
