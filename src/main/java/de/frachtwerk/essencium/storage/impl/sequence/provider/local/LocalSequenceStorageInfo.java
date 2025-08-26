@@ -39,13 +39,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class LocalSequenceStorageInfo extends SequenceStorageInfo
     implements AbstractLocalStorageInfo<SequenceFile, Long, SequenceStorageInfo> {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
-  @SequenceGenerator(
-      name = "hibernate_sequence",
-      sequenceName = "hibernate_sequence",
-      allocationSize = 1)
-  private Long id;
 
   @NotNull private String path;
 
@@ -61,6 +54,6 @@ public class LocalSequenceStorageInfo extends SequenceStorageInfo
 
   @Override
   public String getTitle() {
-    return "LocalSequenceStorageInfo " + id;
+    return "LocalSequenceStorageInfo " + getId();
   }
 }

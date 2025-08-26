@@ -34,7 +34,7 @@ public class UniqueNameCreator {
     int i = 1;
     name = originalName;
     final List<String> parts = Arrays.asList(originalName.split("\\."));
-    String suffix = parts.get(parts.size() - 1);
+    String suffix = parts.getLast();
     String prefix = parts.stream().limit(parts.size() - 1).collect(Collectors.joining("."));
 
     while (exists.test(name)) {

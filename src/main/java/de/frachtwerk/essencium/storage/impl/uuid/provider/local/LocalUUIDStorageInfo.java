@@ -40,9 +40,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class LocalUUIDStorageInfo extends UUIDStorageInfo
     implements AbstractLocalStorageInfo<UUIDFile, UUID, UUIDStorageInfo> {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
 
   @NotNull private String path;
 
@@ -58,6 +55,6 @@ public class LocalUUIDStorageInfo extends UUIDStorageInfo
 
   @Override
   public String getTitle() {
-    return "LocalUUIDStorageInfo " + id;
+    return "LocalUUIDStorageInfo " + getId();
   }
 }

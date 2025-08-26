@@ -19,9 +19,18 @@
 
 package de.frachtwerk.essencium.storage.generic.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import de.frachtwerk.essencium.storage.impl.identity.model.IdentityFile;
 import de.frachtwerk.essencium.storage.impl.identity.model.IdentityStorageInfo;
@@ -48,8 +57,7 @@ class AbstractFileServiceTest {
   @BeforeEach
   void setUp() {
     service =
-        new AbstractFileService<IdentityFile, Long, IdentityStorageInfo>(
-            dispatcher, repository, mimeTypeHelper) {
+        new AbstractFileService<>(dispatcher, repository, mimeTypeHelper) {
           @Override
           protected IdentityFile getNewFile(
               List<IdentityStorageInfo> infos, String name, int length, String mimeType) {
@@ -120,7 +128,7 @@ class AbstractFileServiceTest {
     when(dispatcher.loadFile(identityStorageInfo))
         .thenAnswer(
             invocationOnMock -> {
-              IdentityStorageInfo argument = (IdentityStorageInfo) invocationOnMock.getArgument(0);
+              IdentityStorageInfo argument = invocationOnMock.getArgument(0);
               argument.setContent(mock(Resource.class));
               return argument;
             });
@@ -156,7 +164,7 @@ class AbstractFileServiceTest {
     when(dispatcher.loadFile(identityStorageInfo))
         .thenAnswer(
             invocationOnMock -> {
-              IdentityStorageInfo argument = (IdentityStorageInfo) invocationOnMock.getArgument(0);
+              IdentityStorageInfo argument = invocationOnMock.getArgument(0);
               argument.setContent(null);
               argument.setAvailable(false);
               return argument;
@@ -217,7 +225,7 @@ class AbstractFileServiceTest {
     when(dispatcher.loadFile(identityStorageInfo))
         .thenAnswer(
             invocationOnMock -> {
-              IdentityStorageInfo argument = (IdentityStorageInfo) invocationOnMock.getArgument(0);
+              IdentityStorageInfo argument = invocationOnMock.getArgument(0);
               argument.setContent(mock(Resource.class));
               return argument;
             });
@@ -226,10 +234,10 @@ class AbstractFileServiceTest {
       List<IdentityFile> loadedFiles = service.getAll();
       assertNotNull(loadedFiles);
       assertEquals(1, loadedFiles.size());
-      assertEquals(42L, loadedFiles.get(0).getId());
-      assertTrue(loadedFiles.get(0).isAvailable());
-      assertNotNull(loadedFiles.get(0).getStorageInfos());
-      assertNotNull(loadedFiles.get(0).getContent());
+      assertEquals(42L, loadedFiles.getFirst().getId());
+      assertTrue(loadedFiles.getFirst().isAvailable());
+      assertNotNull(loadedFiles.getFirst().getStorageInfos());
+      assertNotNull(loadedFiles.getFirst().getContent());
     } catch (Exception e) {
       fail(e);
     }
@@ -253,7 +261,7 @@ class AbstractFileServiceTest {
     when(dispatcher.loadFile(identityStorageInfo))
         .thenAnswer(
             invocationOnMock -> {
-              IdentityStorageInfo argument = (IdentityStorageInfo) invocationOnMock.getArgument(0);
+              IdentityStorageInfo argument = invocationOnMock.getArgument(0);
               argument.setContent(mock(Resource.class));
               return argument;
             });
@@ -262,10 +270,10 @@ class AbstractFileServiceTest {
       List<IdentityFile> loadedFiles = service.getAllFiltered(specification);
       assertNotNull(loadedFiles);
       assertEquals(1, loadedFiles.size());
-      assertEquals(42L, loadedFiles.get(0).getId());
-      assertTrue(loadedFiles.get(0).isAvailable());
-      assertNotNull(loadedFiles.get(0).getStorageInfos());
-      assertNotNull(loadedFiles.get(0).getContent());
+      assertEquals(42L, loadedFiles.getFirst().getId());
+      assertTrue(loadedFiles.getFirst().isAvailable());
+      assertNotNull(loadedFiles.getFirst().getStorageInfos());
+      assertNotNull(loadedFiles.getFirst().getContent());
     } catch (Exception e) {
       fail(e);
     }

@@ -39,13 +39,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class S3SequenceStorageInfo extends SequenceStorageInfo
     implements AbstractS3StorageInfo<SequenceFile, Long, SequenceStorageInfo> {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
-  @SequenceGenerator(
-      name = "hibernate_sequence",
-      sequenceName = "hibernate_sequence",
-      allocationSize = 1)
-  private Long id;
 
   @NotNull private String s3ObjectKey;
 
@@ -61,6 +54,6 @@ public class S3SequenceStorageInfo extends SequenceStorageInfo
 
   @Override
   public String getTitle() {
-    return "S3SequenceStorageInfo " + id;
+    return "S3SequenceStorageInfo " + getId();
   }
 }
