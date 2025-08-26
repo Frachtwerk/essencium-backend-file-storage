@@ -97,7 +97,7 @@ of the host.
 
 ## Requirements
 
-- JDK 17
+- JDK 21
 - Maven
 
 ## Testing

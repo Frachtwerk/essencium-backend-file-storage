@@ -98,7 +98,7 @@ public class DownloadEndpoint<
       Resource resource, String name, MediaType contentType) {
     return ResponseEntity.ok()
         .contentType(contentType)
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + name)
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename='" + name + "'")
         .body(resource);
   }
 

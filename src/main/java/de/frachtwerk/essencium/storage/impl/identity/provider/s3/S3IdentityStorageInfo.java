@@ -38,9 +38,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class S3IdentityStorageInfo extends IdentityStorageInfo
     implements AbstractS3StorageInfo<IdentityFile, Long, IdentityStorageInfo> {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
   @NotNull private String s3ObjectKey;
 

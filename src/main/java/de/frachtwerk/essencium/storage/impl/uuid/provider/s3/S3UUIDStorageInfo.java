@@ -40,9 +40,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class S3UUIDStorageInfo extends UUIDStorageInfo
     implements AbstractS3StorageInfo<UUIDFile, UUID, UUIDStorageInfo> {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
 
   @NotNull private String s3ObjectKey;
 
@@ -58,6 +55,6 @@ public class S3UUIDStorageInfo extends UUIDStorageInfo
 
   @Override
   public String getTitle() {
-    return "S3UUIDStorageInfo " + id;
+    return "S3UUIDStorageInfo " + getId();
   }
 }

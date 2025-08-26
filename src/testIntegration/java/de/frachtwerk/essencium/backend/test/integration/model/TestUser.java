@@ -17,44 +17,32 @@
  * along with essencium-backend. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.frachtwerk.essencium.storage.impl.uuid.provider.local;
+package de.frachtwerk.essencium.backend.test.integration.model;
 
-import de.frachtwerk.essencium.storage.generic.model.StorageInfoVisitor;
-import de.frachtwerk.essencium.storage.generic.provider.local.AbstractLocalStorageInfo;
-import de.frachtwerk.essencium.storage.impl.uuid.model.UUIDFile;
-import de.frachtwerk.essencium.storage.impl.uuid.model.UUIDStorageInfo;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
+import de.frachtwerk.essencium.backend.model.AbstractBaseUser;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@Entity(name = "LOCAL_STORAGE_INFO")
-@NoArgsConstructor
 @Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
-public class LocalUUIDStorageInfo extends UUIDStorageInfo
-    implements AbstractLocalStorageInfo<UUIDFile, UUID, UUIDStorageInfo> {
-
-  @NotNull private String path;
-
-  public LocalUUIDStorageInfo(UUIDFile file, @NotNull String path) {
-    super(file);
-    this.path = path;
-  }
-
-  @Override
-  public <T> T accept(StorageInfoVisitor<T, UUIDFile, UUID, UUIDStorageInfo> visitor) {
-    return visitor.visit(this);
-  }
+public class TestUser extends AbstractBaseUser<Long> {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Override
   public String getTitle() {
-    return "LocalUUIDStorageInfo " + getId();
+    return getFirstName() + " " + getLastName();
   }
 }

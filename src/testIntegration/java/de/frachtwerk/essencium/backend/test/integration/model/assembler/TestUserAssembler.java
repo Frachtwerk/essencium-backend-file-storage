@@ -17,29 +17,17 @@
  * along with essencium-backend. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.frachtwerk.essencium.storage.generic.service;
+package de.frachtwerk.essencium.backend.test.integration.model.assembler;
 
-import jakarta.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import de.frachtwerk.essencium.backend.model.representation.assembler.AbstractRepresentationAssembler;
+import de.frachtwerk.essencium.backend.test.integration.model.TestUser;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UniqueNameCreator {
-  @NotNull
-  public String getUniqueName(String originalName, Predicate<String> exists) {
-    String name;
-    int i = 1;
-    name = originalName;
-    final List<String> parts = Arrays.asList(originalName.split("\\."));
-    String suffix = parts.getLast();
-    String prefix = parts.stream().limit(parts.size() - 1).collect(Collectors.joining("."));
-
-    while (exists.test(name)) {
-      name = prefix + "_" + i++ + "." + suffix;
-    }
-    return name;
+public class TestUserAssembler extends AbstractRepresentationAssembler<TestUser, TestUser> {
+  @Override
+  public @NonNull TestUser toModel(@NonNull TestUser entity) {
+    return entity;
   }
 }
