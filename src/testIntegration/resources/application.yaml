@@ -1,0 +1,81 @@
+server:
+  port: 8098
+
+spring:
+  jpa:
+    generate-ddl: true
+
+app:
+  domain: localhost
+  url: http://${app.domain}:8098
+  auth:
+    jwt:
+      access-token-expiration: 86400 # 24 hours
+      refresh-token-expiration: 2592000 # 30 days
+      issuer: Frachtwerk GmbH
+      cleanup-interval: 3600 # 1 hour
+      max-session-expiration-time: 86400 # 24 hours
+  default-logout-redirect-url: ${app.url}
+  allowed-logout-redirect-urls:
+    - ${app.url}
+  cors:
+    allow: true
+
+mail:
+  host: localhost
+  port: 587
+  username: devnull@frachtwerk.de
+  password: changeme
+
+  default-sender:
+    name: Essencium Mailer
+    address: devnull@frachtwerk.de
+
+  smtp:
+    auth: true
+    start-tls: true
+
+  branding:
+    logo: https://static.frachtwerk.de/frachtwerk_320px.png
+    name: ${spring.application.name}
+    url: ${app.url}
+    primary-color: "#00b5d6"
+    text-color: "#ffffff"
+
+  new-user-mail:
+    subject-key: mail.new-user.subject
+    template: NewUserMessage.ftl
+    reset-link: setPassword?token=
+
+  reset-token-mail:
+    subject-key: mail.reset-token.subject
+    template: ResetTokenMessage.ftl
+    reset-link: setPassword?token=
+
+  contact-mail:
+    subject-prefix-key: mail.contact.subject.prefix
+    recipients:
+      - devnull@frachtwerk.de
+    template: ContactMessage.ftl
+    locale: de
+
+  new-login-mail:
+    subject-key: mail.new-login.subject
+    template: NewLoginMessage.ftl
+
+essencium:
+  init:
+    roles:
+      - name: ADMIN
+        description: User-Administrator
+        rights: [ ]
+        protected: true
+        default-role: true
+    users:
+      - first-name: Admin
+        last-name: User
+        username: devnull@frachtwerk.de
+        password: adminAdminAdmin
+        roles:
+          - ADMIN
+debug: true
