@@ -45,14 +45,13 @@ public class TestDownloadController {
   }
 
   @GetMapping("/{id}")
-  public @NotNull @NotNull ResponseEntity<Resource> getTestFile(@PathVariable Long id)
-      throws Exception {
+  public @NotNull @NotNull ResponseEntity<Resource> getTestFile(@PathVariable Long id) {
     SequenceFile sequenceFile = sequenceFileService.loadFile(id).orElseThrow();
     return downloadEndpoint.prepareResponse(sequenceFile);
   }
 
   @DeleteMapping("/{id}")
-  public void deleteTestFile(@PathVariable Long id) throws Exception {
+  public void deleteTestFile(@PathVariable Long id) {
     sequenceFileService.deleteFile(id);
   }
 }
