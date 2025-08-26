@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ import org.springframework.core.io.Resource;
 @NoArgsConstructor
 @Entity(name = "FILE")
 @AllArgsConstructor
+@Builder(toBuilder = true)
 public class SequenceFile extends AbstractFile<SequenceFile, Long, SequenceStorageInfo> {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
