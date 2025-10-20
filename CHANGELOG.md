@@ -11,6 +11,7 @@
 - upgrade org.postgresql:postgresql from 42.7.7 to 42.7.8
 - upgrade software.amazon.awssdk:bom from 2.32.30 to 2.35.9
 - upgrade org.springframework.boot:spring-boot-starter-parent from 3.5.5 to 3.5.6
+- upgrade de.frachtwerk:essencium-backend from 2.12.0 to 3.1.0
 
 ## Version `0.21.0` (2025-08-26)
 
