@@ -1,6 +1,12 @@
 # Changelog
 
-## ______ 
+## Version `0.22.0` (2025-10-20)
+
+### 🌟 Features
+
+### 🐞 Bug Fixes
+
+### 🔨 Dependency Upgrades
 
 - upgrade org.postgresql:postgresql from 42.7.7 to 42.7.8
 - upgrade software.amazon.awssdk:bom from 2.32.30 to 2.35.9
