@@ -1,5 +1,9 @@
 # Changelog
 
+## ______ 
+
+- upgrade org.postgresql:postgresql from 42.7.7 to 42.7.8
+
 ## 0.21.0 (2025-08-26)
 
 - **Java21**
