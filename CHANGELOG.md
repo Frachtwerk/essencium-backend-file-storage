@@ -3,6 +3,7 @@
 ## ______ 
 
 - upgrade org.postgresql:postgresql from 42.7.7 to 42.7.8
+- upgrade software.amazon.awssdk:bom from 2.32.30 to 2.35.9
 
 ## 0.21.0 (2025-08-26)
 
