@@ -78,16 +78,32 @@ jobs:
         uses: actions/checkout@v5
       - name: Set POM version env variable
         run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      - name: Create Release Notes
+        run: |
+          VERSION_DIVIDER="${{ vars.VERSION_DIVIDER || '## Version ' }}"
+          awk -v version_divider="$VERSION_DIVIDER" '
+          $0 ~ version_divider { 
+              if (count == 0) { 
+                  count++; 
+                  next 
+              } else if (count == 1) { 
+                  exit 
+              } 
+          } 
+          count == 1 { 
+              print 
+          }' ./CHANGELOG.md > RELEASE_NOTES.md
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+          body_path: RELEASE_NOTES.md
 
   deploy:
     needs: create-github-release
