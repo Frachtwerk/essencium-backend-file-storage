@@ -123,7 +123,7 @@ jobs:
           cache: 'maven'
       - run: gpg --list-keys
       - run: cat ~/.m2/settings.xml
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: essencium-backend-file-storage
           path: ./target/
