@@ -9,6 +9,8 @@
 
 ### 🐞 Bug Fixes
 
+- integration tests use RustFS as S3 server, because the MinIO server image is no longer published
+
 ### 🔨 Dependency Upgrades
 
 - upgrade org.springframework.boot:spring-boot-starter-parent from 3.5.6 to 4.1.2
@@ -24,6 +26,7 @@
 - upgrade central-publishing-maven-plugin from 0.9.0 to 0.12.0
 - upgrade git-code-format-maven-plugin and google-java-format from 5.4 to 6.2
 - upgrade cyclonedx-maven-plugin from 2.9.1 to 2.9.3
+- upgrade maven-jar-plugin from 3.5.0 to 3.5.1
 - upgrade actions/setup-java from 5 to 6
 
 ## Version `0.22.0` (2025-10-20)
