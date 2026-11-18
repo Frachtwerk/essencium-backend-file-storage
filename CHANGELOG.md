@@ -1,5 +1,31 @@
 # Changelog
 
+## Version `unreleased`
+
+### 🌟 Features
+
+- **Spring Boot 4**: the module now requires Spring Boot 4.1 and essencium-backend 4.0
+- build and CI run on JDK 25; the published JAR stays compatible with Java 21
+
+### 🐞 Bug Fixes
+
+### 🔨 Dependency Upgrades
+
+- upgrade org.springframework.boot:spring-boot-starter-parent from 3.5.6 to 4.1.2
+- upgrade de.frachtwerk:essencium-backend from 3.1.0 to 4.0.2
+- upgrade software.amazon.awssdk:bom from 2.40.8 to 2.59.3
+- upgrade org.postgresql:postgresql from 42.7.8 to 42.7.14 (test dependency)
+- upgrade io.minio:minio from 8.6.0 to 9.0.4 (test dependency)
+- upgrade com.squareup.okhttp3:okhttp-bom and okhttp-jvm from 5.1.0 to 5.5.1 (test dependency)
+- upgrade Testcontainers to 2.x (artifacts renamed to `testcontainers-*`)
+- upgrade maven-surefire-plugin and maven-failsafe-plugin to 3.6.1
+- upgrade build-helper-maven-plugin from 3.6.1 to 3.8.0
+- upgrade jacoco-maven-plugin from 0.8.14 to 0.8.16
+- upgrade central-publishing-maven-plugin from 0.9.0 to 0.12.0
+- upgrade git-code-format-maven-plugin and google-java-format from 5.4 to 6.2
+- upgrade cyclonedx-maven-plugin from 2.9.1 to 2.9.3
+- upgrade actions/setup-java from 5 to 6
+
 ## Version `0.22.0` (2025-10-20)
 
 ### 🌟 Features
