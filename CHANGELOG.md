@@ -10,6 +10,7 @@
 ### 🐞 Bug Fixes
 
 - integration tests use RustFS as S3 server, because the MinIO server image is no longer published
+- the SonarCloud analysis calls the Sonar Maven plugin by its full name with a pinned version, because Maven no longer resolves the `sonar` short name
 
 ### 🔨 Dependency Upgrades
 
