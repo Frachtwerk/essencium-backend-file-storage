@@ -1,6 +1,6 @@
 # Changelog
 
-## Version `unreleased`
+## Version `0.23.0` (2026-11-18)
 
 ### 🌟 Features
 
