@@ -35,8 +35,6 @@ app:
   default-logout-redirect-url: ${app.url}
   allowed-logout-redirect-urls:
     - ${app.url}
-  cors:
-    allow: true
 
 mail:
   host: localhost

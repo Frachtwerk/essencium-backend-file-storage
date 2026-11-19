@@ -4,7 +4,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Frachtwerk_essencium-backend-file-storage&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Frachtwerk_essencium-backend-file-storage)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Frachtwerk_essencium-backend-file-storage&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Frachtwerk_essencium-backend-file-storage)
 
-To be used together with [essencium-backend](https://github.com/Frachtwerk/essencium-backend) (version >=`2.4.5`).
+To be used together with [essencium-backend](https://github.com/Frachtwerk/essencium-backend) (version >=`4.0.0`). For older essencium-backend versions use version `0.22.0` of this module.
 
 This module provides an abstraction layer to store files needed for your application. The actual persistence location and implementation is independent of the handling of files. This is achieved by providing various storage provider implementations that can be used independently of another.
 
@@ -97,7 +97,7 @@ of the host.
 
 ## Requirements
 
-- JDK 21
+- JDK 21 or newer to run; the build and CI use JDK 25
 - Maven
 
 ## Testing

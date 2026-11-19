@@ -61,7 +61,7 @@ public class TestUtil {
     try (InputStream inputStream = file.getInputStream()) {
       minioClient.putObject(
           PutObjectArgs.builder().bucket(bucketName).object(fileKey.toString()).stream(
-                  inputStream, file.getSize(), -1)
+                  inputStream, file.getSize(), null)
               .contentType("text/plain")
               .build());
     } catch (Exception e) {

@@ -24,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.frachtwerk.essencium.backend.model.dto.LoginRequest;
 import de.frachtwerk.essencium.backend.test.integration.util.TestUtil;
 import de.frachtwerk.essencium.storage.impl.sequence.model.SequenceFile;
@@ -38,12 +36,13 @@ import io.minio.StatObjectArgs;
 import io.minio.StatObjectResponse;
 import io.minio.errors.ErrorResponseException;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -54,10 +53,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
-import org.testcontainers.containers.MinIOContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.postgresql.PostgreSQLContainer;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Testcontainers
 @SpringBootTest(
@@ -66,13 +68,25 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @AutoConfigureMockMvc
 public class FileOperationIntegrationTest {
   private static final String BUCKET_NAME = "bucket";
+  private static final int S3_PORT = 9000;
+  private static final String S3_USER = "s3user";
+  private static final String S3_PASSWORD = "s3password";
+  private static final String S3_REGION = "eu-central-1";
 
   @Container
-  static final MinIOContainer MINIO =
-      new MinIOContainer("minio/minio:latest").withUserName("minio").withPassword("minio123");
+  static final GenericContainer<?> S3_CONTAINER =
+      new GenericContainer<>("rustfs/rustfs:latest")
+          .withEnv(
+              Map.of(
+                  "RUSTFS_ACCESS_KEY", S3_USER,
+                  "RUSTFS_SECRET_KEY", S3_PASSWORD,
+                  "RUSTFS_ADDRESS", ":" + S3_PORT,
+                  "RUSTFS_REGION", S3_REGION))
+          .withExposedPorts(S3_PORT)
+          .waitingFor(Wait.forHttp("/health/ready").forPort(S3_PORT).forStatusCode(200));
 
   @Container
-  static final PostgreSQLContainer<?> POSTGRES_CONTAINER = new PostgreSQLContainer<>("postgres:17");
+  static final PostgreSQLContainer POSTGRES_CONTAINER = new PostgreSQLContainer("postgres:17");
 
   @DynamicPropertySource
   static void configure(DynamicPropertyRegistry registry) {
@@ -83,17 +97,21 @@ public class FileOperationIntegrationTest {
     registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
     registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
 
-    if (!MINIO.isRunning()) {
-      MINIO.start();
+    if (!S3_CONTAINER.isRunning()) {
+      S3_CONTAINER.start();
     }
     registry.add("file.enabled", () -> "true");
     registry.add("file.storage.usedProviders", () -> "s3");
     registry.add("file.storage.s3.active", () -> "true");
-    registry.add("file.storage.s3.endpointUrl", MINIO::getS3URL);
-    registry.add("file.storage.s3.accessKey", MINIO::getUserName);
-    registry.add("file.storage.s3.secretKey", MINIO::getPassword);
+    registry.add("file.storage.s3.endpointUrl", FileOperationIntegrationTest::s3Url);
+    registry.add("file.storage.s3.accessKey", () -> S3_USER);
+    registry.add("file.storage.s3.secretKey", () -> S3_PASSWORD);
     registry.add("file.storage.s3.bucketName", () -> BUCKET_NAME);
-    registry.add("file.storage.s3.region", () -> "local");
+    registry.add("file.storage.s3.region", () -> S3_REGION);
+  }
+
+  private static String s3Url() {
+    return "http://" + S3_CONTAINER.getHost() + ":" + S3_CONTAINER.getMappedPort(S3_PORT);
   }
 
   private final WebApplicationContext webApplicationContext;
@@ -145,8 +163,9 @@ public class FileOperationIntegrationTest {
     if (minioClient == null) {
       minioClient =
           MinioClient.builder()
-              .endpoint(MINIO.getS3URL())
-              .credentials(MINIO.getUserName(), MINIO.getPassword())
+              .endpoint(s3Url())
+              .credentials(S3_USER, S3_PASSWORD)
+              .region(S3_REGION)
               .build();
     }
 
