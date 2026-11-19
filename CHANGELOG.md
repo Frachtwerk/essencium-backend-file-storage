@@ -6,6 +6,7 @@
 
 - **Spring Boot 4**: the module now requires Spring Boot 4.1 and essencium-backend 4.0
 - build and CI run on JDK 25; the published JAR stays compatible with Java 21
+- ⚠️ database columns are renamed under essencium-backend 4, see [MIGRATION.md](MIGRATION.md)
 
 ### 🐞 Bug Fixes
 
