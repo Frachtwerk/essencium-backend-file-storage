@@ -49,14 +49,30 @@ public class StorageServiceDispatcher<
 
   public List<S> saveFile(String originalName, byte[] content) throws IOException {
     List<S> infos = new ArrayList<>();
-    for (Providers provider : config.getUsedProviders()) {
-      switch (provider) {
-        case LOCAL -> infos.add(Objects.requireNonNull(local).saveFile(originalName, content));
-        case S3 -> infos.add(Objects.requireNonNull(s3).saveFile(originalName, content));
-        default -> throw new IllegalArgumentException("Unknown provider");
+    try {
+      for (Providers provider : config.getUsedProviders()) {
+        switch (provider) {
+          case LOCAL -> infos.add(Objects.requireNonNull(local).saveFile(originalName, content));
+          case S3 -> infos.add(Objects.requireNonNull(s3).saveFile(originalName, content));
+          default -> throw new IllegalArgumentException("Unknown provider");
+        }
       }
+    } catch (IOException | RuntimeException e) {
+      deleteFiles(infos, e);
+      throw e;
     }
     return infos;
+  }
+
+  /** Deletes stored copies after a failed upload; cleanup errors are added to the cause. */
+  public void deleteFiles(List<S> infos, Exception cause) {
+    for (S info : infos) {
+      try {
+        deleteFile(info);
+      } catch (RuntimeException e) {
+        cause.addSuppressed(e);
+      }
+    }
   }
 
   public boolean deleteFile(S info) {

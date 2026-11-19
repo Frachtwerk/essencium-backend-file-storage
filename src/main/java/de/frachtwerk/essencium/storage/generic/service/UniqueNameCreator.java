@@ -28,6 +28,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UniqueNameCreator {
+  private static final String DEFAULT_NAME = "file";
+
+  /** Returns the last segment of a file name, so that it can not point to another directory. */
+  @NotNull
+  public String getBaseName(String originalName) {
+    String name = originalName == null ? "" : originalName;
+    name = name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1);
+    return name.isBlank() || name.equals(".") || name.equals("..") ? DEFAULT_NAME : name;
+  }
+
   @NotNull
   public String getUniqueName(String originalName, Predicate<String> exists) {
     String name;

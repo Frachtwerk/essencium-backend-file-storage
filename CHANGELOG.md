@@ -10,6 +10,14 @@
 
 ### 🐞 Bug Fixes
 
+- file names from uploads can no longer reach files outside the temporary directory or the storage directory
+- a file whose local copy is missing is downloaded from S3, also on every later request
+- a failed upload no longer leaves stored copies behind
+- parallel uploads with the same name succeed when `keepFileName` is `true`
+- a file with an invalid stored MIME type is downloaded as `application/octet-stream`
+- the `Content-Disposition` header is valid for every file name and carries the full name (`filename` plus RFC 5987 `filename*`)
+- ZIP entries contain no path segments
+- the README states that the S3 bucket must exist
 - integration tests use RustFS as S3 server, because the MinIO server image is no longer published
 - the SonarCloud analysis calls the Sonar Maven plugin by its full name with a pinned version, because Maven no longer resolves the `sonar` short name
 

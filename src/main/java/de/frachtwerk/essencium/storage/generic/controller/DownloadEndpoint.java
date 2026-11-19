@@ -26,9 +26,10 @@ import de.frachtwerk.essencium.storage.generic.service.FileService;
 import de.frachtwerk.essencium.storage.generic.service.UniqueNameCreator;
 import jakarta.validation.constraints.NotNull;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -37,7 +38,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -62,10 +64,19 @@ public class DownloadEndpoint<
   @NotNull
   public ResponseEntity<Resource> prepareResponse(F file) {
     Resource resource = getResource(file);
-    // Fallback to the default content type if type could not be determined
-    String mimeType = Optional.ofNullable(file.getMimeType()).orElse("application/octet-stream");
+    return buildResponse(resource, file.getName(), mediaTypeOf(file.getMimeType()));
+  }
 
-    return buildResponse(resource, file.getName(), MediaType.parseMediaType(mimeType));
+  /** Falls back to the default content type when the stored type is missing or invalid. */
+  private static MediaType mediaTypeOf(String mimeType) {
+    if (mimeType != null) {
+      try {
+        return MediaType.parseMediaType(mimeType);
+      } catch (InvalidMediaTypeException e) {
+        log.warn("Stored MIME type {} is invalid.", mimeType);
+      }
+    }
+    return MediaType.APPLICATION_OCTET_STREAM;
   }
 
   public ResponseEntity<Resource> prepareZipResponse(
@@ -77,7 +88,9 @@ public class DownloadEndpoint<
       Set<String> names = new HashSet<>();
       for (F f : abstractFiles) {
         final InputStream inputStream = getResource(f).getInputStream();
-        String name = uniqueNameCreator.getUniqueName(f.getName(), names::contains);
+        String name =
+            uniqueNameCreator.getUniqueName(
+                uniqueNameCreator.getBaseName(f.getName()), names::contains);
         names.add(name);
         zipOutputStream.putNextEntry(new ZipEntry(name));
         IOUtils.copy(inputStream, zipOutputStream);
@@ -96,15 +109,18 @@ public class DownloadEndpoint<
 
   private ResponseEntity<Resource> buildResponse(
       Resource resource, String name, MediaType contentType) {
+    ContentDisposition contentDisposition =
+        ContentDisposition.attachment().filename(name, StandardCharsets.UTF_8).build();
     return ResponseEntity.ok()
         .contentType(contentType)
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename='" + name + "'")
+        .headers(headers -> headers.setContentDisposition(contentDisposition))
         .body(resource);
   }
 
   private Resource getResource(F file) {
     if (file.isAvailable()) {
-      for (var storage : file.getStorageInfos()) {
+      // markAsUnavailable saves the file, which replaces the content of its storage list.
+      for (var storage : List.copyOf(file.getStorageInfos())) {
         if (storage.isAvailable()) {
           Resource resource = storage.getContent();
           if (resource != null) {

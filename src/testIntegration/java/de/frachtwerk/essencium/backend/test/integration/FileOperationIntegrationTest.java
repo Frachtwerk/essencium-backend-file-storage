@@ -227,7 +227,10 @@ public class FileOperationIntegrationTest {
             header()
                 .string(
                     HttpHeaders.CONTENT_DISPOSITION,
-                    "attachment; filename='" + testFile.getName() + "'"))
+                    "attachment; filename=\""
+                        + testFile.getName()
+                        + "\"; filename*=UTF-8''"
+                        + testFile.getName()))
         .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
         .andExpect(content().bytes("This is a test file for download.".getBytes()));
   }
