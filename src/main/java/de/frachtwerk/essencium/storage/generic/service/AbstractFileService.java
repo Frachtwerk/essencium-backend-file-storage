@@ -31,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.jpa.domain.Specification;
 
 @RequiredArgsConstructor
@@ -48,14 +47,19 @@ public abstract class AbstractFileService<
 
   @Override
   public F storeFile(String name, String mimeType, byte[] fileContent) throws IOException {
-    final List<S> infos = dispatcher.saveFile(name, fileContent);
     if (StringUtils.isBlank(mimeType)) {
       LOG.debug("MIME Type not set. Attempting to determine it...");
       mimeType = mimeTypeHelper.getMimeType(name, fileContent);
     }
-    F file = getNewFile(infos, name, fileContent.length, mimeType);
-    infos.forEach(i -> i.setFile(file));
-    return repository.save(file);
+    final List<S> infos = dispatcher.saveFile(name, fileContent);
+    try {
+      F file = getNewFile(infos, name, fileContent.length, mimeType);
+      infos.forEach(i -> i.setFile(file));
+      return repository.save(file);
+    } catch (RuntimeException e) {
+      dispatcher.deleteFiles(infos, e);
+      throw e;
+    }
   }
 
   protected abstract F getNewFile(List<S> infos, String name, int length, String mimeType);
@@ -84,7 +88,8 @@ public abstract class AbstractFileService<
   @NotNull
   @Override
   public F loadFromProviders(@NotNull F f) {
-    for (S info : f.getStorageInfos()) {
+    // markAsUnavailable saves the file, which replaces the content of its storage list.
+    for (S info : List.copyOf(f.getStorageInfos())) {
       if (info.isAvailable()) {
         dispatcher.loadFile(info);
         if (info.getContent() != null) {
@@ -116,7 +121,6 @@ public abstract class AbstractFileService<
   }
 
   @Override
-  @CachePut(value = "files", key = "#result.id")
   public void markAsUnavailable(S info) {
     LOG.debug("Mark storage {} of file {} as unavailable.", info.getFile().getId(), info.getId());
     info.setAvailable(false);

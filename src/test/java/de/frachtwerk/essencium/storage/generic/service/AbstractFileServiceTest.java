@@ -23,9 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -295,5 +297,19 @@ class AbstractFileServiceTest {
   @Test
   void markAsUnavailable() {
     // TODO: Implement
+  }
+
+  @Test
+  @DisplayName("Failing database insert removes the stored copies")
+  void storeFileRemovesStoredCopiesWhenSavingFails() throws IOException {
+    byte[] fileContent = new byte[1];
+    IdentityStorageInfo storedCopy = mock(IdentityStorageInfo.class);
+    when(dispatcher.saveFile("name", fileContent)).thenReturn(List.of(storedCopy));
+    when(repository.save(any(IdentityFile.class)))
+        .thenThrow(new IllegalStateException("database not reachable"));
+
+    assertThrows(
+        IllegalStateException.class, () -> service.storeFile("name", "mimeType", fileContent));
+    verify(dispatcher).deleteFiles(eq(List.of(storedCopy)), any(IllegalStateException.class));
   }
 }

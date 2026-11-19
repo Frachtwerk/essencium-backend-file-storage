@@ -21,22 +21,30 @@ package de.frachtwerk.essencium.storage.generic.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MimeTypeHelper {
+  private static final Pattern EXTENSION = Pattern.compile("[A-Za-z0-9]+");
 
   public String getMimeType(String name, byte[] fileContent) throws IOException {
-    String mimeType;
-    final java.io.File folder = Files.createTempDirectory("starter").toFile();
-    folder.deleteOnExit();
-    java.io.File f = new java.io.File(folder, name);
+    // The temporary file only takes the extension, so the name can not select its location.
+    Path file = Files.createTempFile("upload", extensionOf(name));
     try {
-      Files.write(f.toPath(), fileContent);
-      mimeType = Files.probeContentType(f.toPath());
+      Files.write(file, fileContent);
+      return Files.probeContentType(file);
     } finally {
-      f.delete();
+      Files.deleteIfExists(file);
     }
-    return mimeType;
+  }
+
+  private static String extensionOf(String name) {
+    if (name == null || name.lastIndexOf('.') < 0) {
+      return null;
+    }
+    String extension = name.substring(name.lastIndexOf('.') + 1);
+    return EXTENSION.matcher(extension).matches() ? "." + extension : null;
   }
 }

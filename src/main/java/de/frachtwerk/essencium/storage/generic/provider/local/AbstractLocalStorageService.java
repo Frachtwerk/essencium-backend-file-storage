@@ -27,6 +27,7 @@ import de.frachtwerk.essencium.storage.generic.service.UniqueNameCreator;
 import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -41,6 +42,8 @@ public abstract class AbstractLocalStorageService<
         ID extends Serializable,
         S extends AbstractStorageInfo<F, ID, S>>
     implements StorageService<F, ID, S> {
+  private static final int MAX_CREATE_ATTEMPTS = 100;
+
   private final Logger LOG = LoggerFactory.getLogger(AbstractLocalStorageService.class);
 
   @NotNull private final LocalFileCreator fileCreator;
@@ -49,15 +52,7 @@ public abstract class AbstractLocalStorageService<
 
   @Override
   public final S saveFile(String originalName, byte[] content) throws IOException {
-    String name;
-    if (originalName != null && config.isKeepFileName()) {
-      name = uniqueNameCreator.getUniqueName(originalName, this::exists);
-    } else {
-      do {
-        name = UUID.randomUUID().toString();
-      } while (new java.io.File(name).exists());
-    }
-    java.io.File f = fileCreator.createFile(name);
+    java.io.File f = createUniqueFile(originalName);
     Files.write(f.toPath(), content);
     final String path = f.getAbsolutePath();
     LOG.debug("Saved file at {}.", path);
@@ -68,6 +63,28 @@ public abstract class AbstractLocalStorageService<
 
   protected abstract <SI extends AbstractLocalStorageInfo<F, ID, S>> SI getNewLocalStorageInfo(
       F file, String path);
+
+  /**
+   * Creates the file atomically and takes the next free name when another upload created the same
+   * name in the meantime.
+   */
+  private java.io.File createUniqueFile(String originalName) throws IOException {
+    boolean keepFileName = originalName != null && config.isKeepFileName();
+    String baseName = keepFileName ? uniqueNameCreator.getBaseName(originalName) : null;
+    for (int attempt = 1; ; attempt++) {
+      String name =
+          keepFileName
+              ? uniqueNameCreator.getUniqueName(baseName, this::exists)
+              : UUID.randomUUID().toString();
+      try {
+        return fileCreator.createFile(name);
+      } catch (FileAlreadyExistsException e) {
+        if (attempt >= MAX_CREATE_ATTEMPTS) {
+          throw e;
+        }
+      }
+    }
+  }
 
   private boolean exists(String name) {
     Path path = Path.of(config.resolvePath().toString(), name);
